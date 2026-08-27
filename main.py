@@ -106,21 +106,33 @@ async def get_resource(request: Request):
 
 @app.get("/")
 async def index(request: Request, lang: str = Cookie(default="en")):
+    # Sanitize lang parameter to prevent XSS
+    if lang not in ("en", "id"):
+        lang = "en"
     content = load_content(lang)
     return templates.TemplateResponse(request, "index.html", {"content": content, "lang": lang})
 
 @app.get("/demo")
 async def demo(request: Request, lang: str = Cookie(default="en")):
+    # Sanitize lang parameter to prevent XSS
+    if lang not in ("en", "id"):
+        lang = "en"
     content = load_content(lang)
     return templates.TemplateResponse(request, "demo.html", {"content": content, "lang": lang})
 
 @app.get("/contact")
 async def contact(request: Request, lang: str = Cookie(default="en")):
+    # Sanitize lang parameter to prevent XSS
+    if lang not in ("en", "id"):
+        lang = "en"
     content = load_content(lang)
     return templates.TemplateResponse(request, "contact.html", {"content": content, "lang": lang})
 
 @app.get("/phone")
 async def phone(request: Request, lang: str = Cookie(default="en")):
+    # Sanitize lang parameter to prevent XSS
+    if lang not in ("en", "id"):
+        lang = "en"
     content = load_content(lang)
     return templates.TemplateResponse(request, "phone.html", {"content": content, "lang": lang})
 
