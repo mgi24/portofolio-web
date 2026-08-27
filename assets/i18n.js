@@ -3,7 +3,7 @@
  * 
  * Features:
  * - No server request needed to change language
- * - Auto-detect browser language on first visit
+ * - Default language is English
  * - Persist language choice in localStorage
  * - Easy to extend with new languages
  * 
@@ -17,6 +17,9 @@ const I18n = {
   // All translations (injected by server)
   translations: {},
   
+  // Default language
+  defaultLang: 'en',
+  
   // Current active language
   currentLang: 'en',
   
@@ -25,7 +28,7 @@ const I18n = {
    * Should be called once on page load
    */
   init() {
-    // Get saved language or detect from browser
+    // Get saved language or fallback to English
     this.currentLang = this.getPreferredLanguage();
     
     // Apply translations
@@ -38,7 +41,7 @@ const I18n = {
   },
   
   /**
-   * Get preferred language from localStorage or browser
+   * Get preferred language from localStorage or fallback to English
    */
   getPreferredLanguage() {
     // Check localStorage first
@@ -47,16 +50,8 @@ const I18n = {
       return saved;
     }
     
-    // Detect from browser
-    const browserLang = navigator.language || navigator.userLanguage;
-    const langCode = browserLang.toLowerCase().slice(0, 2);
-    
-    if (this.translations[langCode]) {
-      return langCode;
-    }
-    
-    // Fallback to English
-    return 'en';
+    // Fallback to English (default)
+    return this.defaultLang;
   },
   
   /**
@@ -66,10 +61,12 @@ const I18n = {
   set(lang) {
     if (!this.translations[lang]) {
       console.warn(`[i18n] Language "${lang}" not found, falling back to English`);
-      lang = 'en';
+      lang = this.defaultLang;
     }
     
     this.currentLang = lang;
+    
+    // Save to localStorage for persistence
     localStorage.setItem('preferred_lang', lang);
     
     this.updatePage();
@@ -119,53 +116,50 @@ const I18n = {
    * Setup language switcher dropdown
    */
   setupSwitcher() {
-    const switcher = document.querySelector('.lang-switcher');
-    if (!switcher) return;
+    const dropdown = document.querySelector('.dropdown');
+    if (!dropdown) return;
     
     // Get available languages from translations object
     const availableLangs = Object.keys(this.translations);
     
-    // Create language buttons
-    switcher.innerHTML = availableLangs.map(lang => `
-      <button 
-        class="lang-btn ${lang === this.currentLang ? 'active' : ''}" 
-        data-lang="${lang}"
-        type="button"
-      >
-        ${this.getLangName(lang)}
-      </button>
-    `).join('');
+    // Update dropdown button with current language
+    const dropbtn = dropdown.querySelector('.dropbtn');
+    if (dropbtn) {
+      dropbtn.textContent = this.getLangName(this.currentLang) + ' ▼';
+    }
     
-    // Add click handlers
-    switcher.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const lang = btn.dataset.lang;
-        this.set(lang);
+    // Update dropdown content with language options
+    const dropdownContent = dropdown.querySelector('.dropdown-content');
+    if (dropdownContent) {
+      dropdownContent.innerHTML = availableLangs.map(lang => `
+        <a href="#" class="lang-link" data-lang="${lang}">${this.getLangName(lang)}</a>
+      `).join('');
+      
+      // Add click handlers
+      dropdownContent.querySelectorAll('.lang-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const lang = link.dataset.lang;
+          this.set(lang);
+        });
       });
-    });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!switcher.contains(e.target)) {
-        switcher.classList.remove('open');
-      }
-    });
+    }
     
     this.updateSwitcherState();
   },
   
   /**
-   * Update switcher dropdown appearance
+   * Update dropdown button state
    */
   updateSwitcherState() {
-    const switcher = document.querySelector('.lang-switcher');
-    if (!switcher) return;
+    const dropdown = document.querySelector('.dropdown');
+    if (!dropdown) return;
     
-    // Update active button
-    switcher.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === this.currentLang);
-    });
+    const dropbtn = dropdown.querySelector('.dropbtn');
+    if (dropbtn) {
+      dropbtn.textContent = this.getLangName(this.currentLang) + ' ▼';
+    }
   },
   
   /**
@@ -197,7 +191,7 @@ const I18n = {
    */
   t(key) {
     return this.translations[this.currentLang]?.[key] || 
-           this.translations['en']?.[key] || 
+           this.translations[this.defaultLang]?.[key] || 
            key;
   }
 };
