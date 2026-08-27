@@ -1,10 +1,9 @@
 import json
-import os
 import time
 from pathlib import Path
 
-from fastapi import FastAPI, Request, Response, Cookie, HTTPException
-from fastapi.responses import RedirectResponse, JSONResponse, StreamingResponse
+from fastapi import FastAPI, Request, Cookie, HTTPException
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -102,40 +101,6 @@ async def get_resource(request: Request):
         "usage_pct": min(round((rx_mbps + tx_mbps) / max_mbps * 100, 2), 100),
         "max_mbps": max_mbps,
     }
-
-# --- Speedtest ---
-
-_ST_CHUNK = 1_000_000
-_ST_BLOB = os.urandom(_ST_CHUNK)
-
-def _st_gen(size: int):
-    remaining = size
-    while remaining > 0:
-        n = min(remaining, _ST_CHUNK)
-        yield _ST_BLOB[:n]
-        remaining -= n
-
-@app.get("/speedtest/download")
-async def st_download(size_mb: int = 100):
-    size = size_mb * _ST_CHUNK
-    return StreamingResponse(
-        _st_gen(size),
-        media_type="application/octet-stream",
-        headers={
-            "Content-Disposition": "attachment; filename=speedtest.dat",
-            "Content-Length": str(size),
-        },
-    )
-
-@app.post("/speedtest/api/upload")
-async def st_upload(size_mb: int = 100, request: Request = None):
-    start = time.time()
-    size = 0
-    async for chunk in request.stream():
-        size += len(chunk)
-    elapsed = time.time() - start
-    mbits = (size * 8) / 1_000_000 / elapsed if elapsed > 0 else 0
-    return {"size_mb": size_mb, "elapsed_s": round(elapsed, 4), "speed_mbps": round(mbits, 2)}
 
 # --- Pages ---
 
