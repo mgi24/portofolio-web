@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ lang }}" style="background-color: #0f0f0f; color: #e0e0e0;">
+<html lang="en" style="background-color: #0f0f0f; color: #e0e0e0;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,21 +10,29 @@
 <body>
   <nav>
     <div class="nav-left">
-      <a href="/" class="nav-item">{{ content.nav_intro }}</a>
-      <a href="/demo" class="nav-item">{{ content.nav_demo }}</a>
-      <a href="/contact" class="nav-item">{{ content.nav_contact }}</a>
+      <a href="/" class="nav-item" data-i18n="nav_intro">Introduction</a>
+      <a href="/demo" class="nav-item" data-i18n="nav_demo">Demo</a>
+      <a href="/contact" class="nav-item" data-i18n="nav_contact">Contact</a>
     </div>
     <div class="nav-right">
-      <div class="dropdown">
-        <button class="dropbtn">{{ content.nav_language }} &#9662;</button>
-        <div class="dropdown-content">
-          <a href="/set-language/en?next={{ request.url.path }}">English</a>
-          <a href="/set-language/id?next={{ request.url.path }}">Indonesian</a>
-        </div>
-      </div>
+      <div class="lang-switcher" data-i18n="nav_language">Language</div>
     </div>
   </nav>
 
   {% block content %}{% endblock %}
+
+  <!-- Hidden translations container (injected by server) -->
+  <script id="i18n-translations" type="application/json">
+    {{ contents | tojson }}
+  </script>
+
+  <!-- i18n client-side system -->
+  <script src="/static/i18n.js"></script>
+
+  <script>
+    // Initialize i18n with translations from server
+    I18n.translations = JSON.parse(document.getElementById('i18n-translations').textContent);
+    I18n.init();
+  </script>
 </body>
 </html>

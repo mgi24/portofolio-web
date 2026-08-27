@@ -48,5 +48,7 @@
   "diary_last_label": "Last Post",
   "diary_loading": "Loading...",
   "diary_activity": "Activity",
-  "toast_copied": "Copied!"
+  "toast_copied": "Copied!",
+  "phone_message": "Telephone is no longer shared, please contact via other social media, especially Facebook!",
+  "phone_back": "Back to Contact"
 }

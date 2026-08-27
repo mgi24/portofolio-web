@@ -2,29 +2,29 @@
 
 {% block content %}
 <div class="container contact-page">
-  <h2 class="contact-title">{{ content.contact_title }}</h2>
+  <h2 class="contact-title" data-i18n="contact_title">Let's Connect!</h2>
 
   <div class="blobs-grid">
     <a href="/phone" class="blob blob-wa">
       <div class="blob-inner">
         <img src="/static/wa.svg" alt="WhatsApp" class="blob-icon">
-        <span class="blob-name">{{ content.contact_wa_name }}</span>
-        <span class="blob-response">{{ content.contact_wa_resp }}</span>
+        <span class="blob-name" data-i18n="contact_wa_name">WhatsApp</span>
+        <span class="blob-response" data-i18n="contact_wa_resp">Respond in Seconds!</span>
       </div>
     </a>
 
     <a href="https://www.facebook.com/MishbahGI" target="_blank" class="blob blob-fb">
       <div class="blob-inner">
         <img src="/static/fb.svg" alt="Facebook" class="blob-icon">
-        <span class="blob-name">{{ content.contact_fb_name }}</span>
-        <span class="blob-response">{{ content.contact_fb_resp }}</span>
+        <span class="blob-name" data-i18n="contact_fb_name">Facebook</span>
+        <span class="blob-response" data-i18n="contact_fb_resp">Respond in Minutes!</span>
       </div>
     </a>
 
     <div class="blob blob-discord" onclick="toggleDiscord()">
       <div class="blob-inner">
         <img src="/static/discord.svg" alt="Discord" class="blob-icon">
-        <span class="blob-name">{{ content.contact_discord_name }}</span>
+        <span class="blob-name" data-i18n="contact_discord_name">Discord</span>
         <div class="discord-reveal" id="discordReveal">
           <span id="discordText">@gl1tchmmv</span>
           <img src="/static/copy.svg" alt="Copy" class="copy-icon" id="discordCopyIcon">
@@ -35,8 +35,8 @@
     <div class="blob blob-email" onclick="toggleEmail()">
       <div class="blob-inner">
         <img src="/static/email.svg" alt="Email" class="blob-icon">
-        <span class="blob-name">{{ content.contact_email_name }}</span>
-        <span class="blob-response">{{ content.contact_email_resp }}</span>
+        <span class="blob-name" data-i18n="contact_email_name">Email</span>
+        <span class="blob-response" data-i18n="contact_email_resp">Respond in Hours</span>
         <div class="email-reveal" id="emailReveal">
           <span id="emailText">mishbahgi@gmail.com</span>
           <img src="/static/copy.svg" alt="Copy" class="copy-icon" id="emailCopyIcon">
@@ -45,40 +45,40 @@
     </div>
   </div>
 
-  <h3 class="other-title">{{ content.contact_other_title }}</h3>
+  <h3 class="other-title" data-i18n="contact_other_title">Other ways to keep in touch with me:</h3>
   <div class="other-links">
     <a href="/phone" class="other-item">
       <img src="/static/tg.svg" alt="Telegram" class="other-icon">
       <div class="other-text">
-        <span class="other-name">{{ content.contact_tg_name }}</span>
-        <span class="other-desc">{{ content.contact_tg_desc }}</span>
+        <span class="other-name" data-i18n="contact_tg_name">Telegram</span>
+        <span class="other-desc" data-i18n="contact_tg_desc">Chat with me! 💬</span>
       </div>
     </a>
     <a href="https://www.youtube.com/@MMVProject" target="_blank" class="other-item">
       <img src="/static/yt.svg" alt="YouTube" class="other-icon">
       <div class="other-text">
-        <span class="other-name">{{ content.contact_yt_name }}</span>
-        <span class="other-desc">{{ content.contact_yt_desc }}</span>
+        <span class="other-name" data-i18n="contact_yt_name">YouTube</span>
+        <span class="other-desc" data-i18n="contact_yt_desc">Subscribe pls ❤️</span>
       </div>
     </a>
     <a href="https://www.linkedin.com/in/ahmad-mishbahuddin/" target="_blank" class="other-item">
       <img src="/static/linkedin.svg" alt="LinkedIn" class="other-icon">
       <div class="other-text">
-        <span class="other-name">{{ content.contact_li_name }}</span>
-        <span class="other-desc">{{ content.contact_li_desc }}</span>
+        <span class="other-name" data-i18n="contact_li_name">LinkedIn</span>
+        <span class="other-desc" data-i18n="contact_li_desc">Rarely post 😢</span>
       </div>
     </a>
     <a href="https://www.instagram.com/ahmad_mishbahuddin/" target="_blank" class="other-item">
       <img src="/static/ig.svg" alt="Instagram" class="other-icon">
       <div class="other-text">
-        <span class="other-name">{{ content.contact_ig_name }}</span>
-        <span class="other-desc">{{ content.contact_ig_desc }}</span>
+        <span class="other-name" data-i18n="contact_ig_name">Instagram</span>
+        <span class="other-desc" data-i18n="contact_ig_desc">barely alive 💀</span>
       </div>
     </a>
   </div>
 </div>
 
-<div class="toast" id="toast">{{ content.toast_copied }}</div>
+<div class="toast" id="toast" data-i18n="toast_copied">Copied!</div>
 
 <script>
 function copyText(text, iconId) {

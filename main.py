@@ -20,6 +20,13 @@ def load_content(lang: str) -> dict:
     with open(file_path, "r") as f:
         return json.load(f)
 
+def get_all_contents() -> dict:
+    """Load all available translations"""
+    contents = {}
+    for lang in ["en", "id"]:
+        contents[lang] = load_content(lang)
+    return contents
+
 # --- Resource monitoring ---
 
 _prev_cpu = None
@@ -105,36 +112,24 @@ async def get_resource(request: Request):
 # --- Pages ---
 
 @app.get("/")
-async def index(request: Request, lang: str = Cookie(default="en")):
-    # Sanitize lang parameter to prevent XSS
-    if lang not in ("en", "id"):
-        lang = "en"
-    content = load_content(lang)
-    return templates.TemplateResponse(request, "index.html", {"content": content, "lang": lang})
+async def index(request: Request):
+    contents = get_all_contents()
+    return templates.TemplateResponse(request, "index.html", {"contents": contents})
 
 @app.get("/demo")
-async def demo(request: Request, lang: str = Cookie(default="en")):
-    # Sanitize lang parameter to prevent XSS
-    if lang not in ("en", "id"):
-        lang = "en"
-    content = load_content(lang)
-    return templates.TemplateResponse(request, "demo.html", {"content": content, "lang": lang})
+async def demo(request: Request):
+    contents = get_all_contents()
+    return templates.TemplateResponse(request, "demo.html", {"contents": contents})
 
 @app.get("/contact")
-async def contact(request: Request, lang: str = Cookie(default="en")):
-    # Sanitize lang parameter to prevent XSS
-    if lang not in ("en", "id"):
-        lang = "en"
-    content = load_content(lang)
-    return templates.TemplateResponse(request, "contact.html", {"content": content, "lang": lang})
+async def contact(request: Request):
+    contents = get_all_contents()
+    return templates.TemplateResponse(request, "contact.html", {"contents": contents})
 
 @app.get("/phone")
-async def phone(request: Request, lang: str = Cookie(default="en")):
-    # Sanitize lang parameter to prevent XSS
-    if lang not in ("en", "id"):
-        lang = "en"
-    content = load_content(lang)
-    return templates.TemplateResponse(request, "phone.html", {"content": content, "lang": lang})
+async def phone(request: Request):
+    contents = get_all_contents()
+    return templates.TemplateResponse(request, "phone.html", {"contents": contents})
 
 # --- Safe redirect paths (whitelist) ---
 _SAFE_PATHS = {"", "/", "/demo", "/contact", "/phone"}

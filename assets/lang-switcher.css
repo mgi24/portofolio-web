@@ -1,0 +1,77 @@
+<style>
+  .lang-switcher {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lang-switcher .dropbtn {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .lang-switcher .dropbtn:hover {
+    color: #fff;
+  }
+
+  .lang-switcher .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #1a1a2e;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .lang-switcher.open .dropdown-content {
+    display: block;
+  }
+
+  .lang-btn {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+
+  .lang-btn:hover {
+    background-color: #2a2a4e;
+  }
+
+  .lang-btn.active {
+    background-color: #e94560;
+    color: #fff;
+  }
+
+  .lang-btn.active:hover {
+    background-color: #d63850;
+  }
+</style>
+
+<script>
+  // Toggle dropdown on click
+  document.addEventListener('click', function(e) {
+    const switcher = e.target.closest('.lang-switcher');
+    if (switcher) {
+      switcher.classList.toggle('open');
+    } else {
+      document.querySelectorAll('.lang-switcher').forEach(s => s.classList.remove('open'));
+    }
+  });
+</script>
