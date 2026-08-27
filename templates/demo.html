@@ -5,10 +5,10 @@
 
   <div class="card card-network">
     <div class="card-body">
-      <div class="network-title">{{ content.network_title }}</div>
+      <div class="network-title" data-i18n="network_title">Network Infrastructure</div>
       <div class="network-grid">
         <div class="network-left">
-          <div class="powered-by">{{ content.network_powered }}</div>
+          <div class="powered-by" data-i18n="network_powered">Powered by Oracle | Protected by Cloudflare</div>
           <div class="brand-logos">
             <img src="/static/oracle_logo.png" alt="Oracle" class="brand-logo">
             <img src="/static/cloudflare_logo.png" alt="Cloudflare" class="brand-logo">
@@ -29,7 +29,7 @@
                   <span class="gauge-pct" id="cpu-pct">0</span><span class="gauge-pct-unit">%</span>
                 </div>
               </div>
-              <div class="gauge-name">{{ content.network_cpu }}</div>
+              <div class="gauge-name" data-i18n="network_cpu">4 Arm 64 CPU</div>
             </div>
             <div class="gauge-box">
               <div class="gauge-svg-wrap">
@@ -44,7 +44,10 @@
                   <span class="gauge-pct" id="ram-pct">0</span><span class="gauge-pct-unit">%</span>
                 </div>
               </div>
-              <div class="gauge-name" id="ram-label">{{ content.network_ram }} <span class="gauge-ram-detail" id="ram-detail">0.0 / 0.0 GB</span></div>
+              <div class="gauge-name" id="ram-label">
+                <span data-i18n="network_ram">RAM</span>
+                <span class="gauge-ram-detail" id="ram-detail">0.0 / 0.0 GB</span>
+              </div>
             </div>
             <div class="gauge-box">
               <div class="gauge-svg-wrap">
@@ -77,11 +80,11 @@
     <div class="card-body">
       <div class="vpn-grid">
         <div class="vpn-left">
-          <div class="vpn-heading">{{ content.vpn_title }}</div>
-          <div class="vpn-desc">{{ content.vpn_desc }}</div>
+          <div class="vpn-heading" data-i18n="vpn_title">Need a VPN?</div>
+          <div class="vpn-desc" data-i18n="vpn_desc">Get a free VPN. Available as long as bandwidth available!</div>
           <div class="domain-label">vpn.misbahwork.my.id</div>
         </div>
-        <a href="https://vpn.misbahwork.my.id" target="_blank" class="vpn-btn">{{ content.vpn_button }}</a>
+        <a href="https://vpn.misbahwork.my.id" target="_blank" class="vpn-btn" data-i18n="vpn_button">Get Free VPN</a>
       </div>
     </div>
   </div>
@@ -90,13 +93,11 @@
     <div class="card-body">
       <div class="demo-grid">
         <div class="demo-left">
-          <div class="demo-title"><strong>{{ content.demo_title }}</strong></div>
-          <div class="demo-desc">{{ content.demo_desc }}</div>
+          <div class="demo-title"><strong data-i18n="demo_title">Object Detection Demo</strong></div>
+          <div class="demo-desc" data-i18n="demo_desc">Object detection, segmentation, license plate reader. Got other idea?</div>
           <div class="domain-label">object.misbahwork.my.id</div>
         </div>
-        <a href="https://object.misbahwork.my.id" target="_blank" class="demo-btn">
-          {{ content.demo_button }}
-        </a>
+        <a href="https://object.misbahwork.my.id" target="_blank" class="demo-btn" data-i18n="demo_button">View Demo</a>
       </div>
     </div>
   </div>
@@ -105,51 +106,14 @@
     <div class="card-body">
       <div class="llm-grid">
         <div class="llm-left">
-          <div class="llm-heading">{{ content.llm_title }}</div>
-          <div class="llm-desc">{{ content.llm_desc }}</div>
+          <div class="llm-heading" data-i18n="llm_title">Local LLM</div>
+          <div class="llm-desc" data-i18n="llm_desc">100% Fully selfhosted local AI. Are you ready for AI-Pocalypse? because i do!</div>
           <div class="domain-label domain-llm">chat.misbahwork.my.id</div>
         </div>
-        <a href="https://chat.misbahwork.my.id" target="_blank" class="llm-btn">{{ content.llm_button }}</a>
+        <a href="https://chat.misbahwork.my.id" target="_blank" class="llm-btn" data-i18n="llm_button">Chat Now</a>
       </div>
     </div>
   </div>
 
 </div>
-
-<script>
-(function() {
-  const ARC = 188.5;
-
-  const cpuArc = document.getElementById('cpu-arc');
-  const ramArc = document.getElementById('ram-arc');
-  const cpuPct = document.getElementById('cpu-pct');
-  const ramPct = document.getElementById('ram-pct');
-  const ramDetail = document.getElementById('ram-detail');
-  const netDlArc = document.getElementById('net-dl-arc');
-  const netUlArc = document.getElementById('net-ul-arc');
-  const netPct = document.getElementById('net-pct');
-  const netDlVal = document.getElementById('net-dl-val');
-  const netUlVal = document.getElementById('net-ul-val');
-
-  async function fetchResource() {
-    try {
-      const res = await fetch('/resource');
-      const d = await res.json();
-      cpuArc.setAttribute('stroke-dashoffset', ARC * (1 - d.cpu / 100));
-      ramArc.setAttribute('stroke-dashoffset', ARC * (1 - d.ram_percent / 100));
-      cpuPct.textContent = d.cpu;
-      ramPct.textContent = d.ram_percent;
-      ramDetail.textContent = d.ram_used_gb + ' / ' + d.ram_total_gb + ' GB';
-      netDlArc.setAttribute('stroke-dashoffset', d.rx_pct > 0 ? ARC * (1 - d.rx_pct / 100) : ARC + 1);
-      netUlArc.setAttribute('stroke-dashoffset', d.tx_pct > 0 ? ARC * (1 - d.tx_pct / 100) : ARC + 1);
-      netPct.textContent = d.usage_pct.toFixed(2);
-      netDlVal.textContent = '\u2193 ' + d.rx_mbps.toFixed(2);
-      netUlVal.textContent = '\u2191 ' + d.tx_mbps.toFixed(2);
-    } catch (_) {}
-  }
-
-  fetchResource();
-  setInterval(fetchResource, 1000);
-})();
-</script>
 {% endblock %}
