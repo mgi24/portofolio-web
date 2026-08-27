@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" style="background-color: #0f0f0f; color: #e0e0e0;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMV Project</title>
+  <link rel="icon" type="image/png" href="/static/mmvlogo.png">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <a href="/" class="nav-item">{{ content.nav_intro }}</a>
+      <a href="/demo" class="nav-item">{{ content.nav_demo }}</a>
+      <a href="/contact" class="nav-item">{{ content.nav_contact }}</a>
+    </div>
+    <div class="nav-right">
+      <div class="dropdown">
+        <button class="dropbtn">{{ content.nav_language }} &#9662;</button>
+        <div class="dropdown-content">
+          <a href="/set-language/en?next={{ request.url.path }}">English</a>
+          <a href="/set-language/id?next={{ request.url.path }}">Indonesian</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+</body>
+</html>

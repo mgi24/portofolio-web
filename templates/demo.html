@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+
+  <div class="card card-network">
+    <div class="card-body">
+      <div class="network-title">{{ content.network_title }}</div>
+      <div class="network-grid">
+        <div class="network-left">
+          <div class="powered-by">{{ content.network_powered }}</div>
+          <div class="brand-logos">
+            <img src="/static/oracle_logo.png" alt="Oracle" class="brand-logo">
+            <img src="/static/cloudflare_logo.png" alt="Cloudflare" class="brand-logo">
+          </div>
+        </div>
+        <div class="network-right">
+          <div class="speed-gauges">
+            <div class="gauge-box">
+              <div class="gauge-svg-wrap">
+                <svg class="gauge-svg" viewBox="0 0 140 80">
+                  <path d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+                  <path id="cpu-arc" d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#00d4aa" stroke-width="10" stroke-linecap="round"
+                    stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+                </svg>
+                <div class="gauge-readout">
+                  <span class="gauge-pct" id="cpu-pct">0</span><span class="gauge-pct-unit">%</span>
+                </div>
+              </div>
+              <div class="gauge-name">{{ content.network_cpu }}</div>
+            </div>
+            <div class="gauge-box">
+              <div class="gauge-svg-wrap">
+                <svg class="gauge-svg" viewBox="0 0 140 80">
+                  <path d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+                  <path id="ram-arc" d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#3b82f6" stroke-width="10" stroke-linecap="round"
+                    stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+                </svg>
+                <div class="gauge-readout">
+                  <span class="gauge-pct" id="ram-pct">0</span><span class="gauge-pct-unit">%</span>
+                </div>
+              </div>
+              <div class="gauge-name" id="ram-label">{{ content.network_ram }} <span class="gauge-ram-detail" id="ram-detail">0.0 / 0.0 GB</span></div>
+            </div>
+            <div class="gauge-box">
+              <div class="gauge-svg-wrap">
+                <svg class="gauge-svg" viewBox="0 0 140 80">
+                  <path d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+                  <path id="net-dl-arc" d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="butt"
+                    stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+                  <path id="net-ul-arc" d="M 10 75 A 60 60 0 0 1 130 75"
+                    fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="butt"
+                    stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+                </svg>
+                <div class="gauge-readout">
+                  <span class="gauge-pct" id="net-pct">0</span><span class="gauge-pct-unit">%</span>
+                </div>
+              </div>
+              <div class="gauge-name" style="font-size:11px">
+                <span id="net-dl-val">↓ 0.00</span> / <span id="net-ul-val">↑ 0.00</span>
+                <span style="color:#555;font-weight:400">Mbps</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="st-section">
+        <div class="st-grid">
+          <div class="st-info">
+            <div class="st-heading">{{ content.st_heading }}</div>
+            <div class="st-desc">{{ content.st_desc }}</div>
+          </div>
+          <div class="st-ctrl">
+            <div class="st-cols">
+              <div class="st-col">
+                <div class="st-col-val" id="st-ping-val">—</div>
+                <div class="st-col-unit">ms</div>
+                <div class="st-col-lbl">{{ content.st_ping }}</div>
+              </div>
+              <div class="st-col-div"></div>
+              <div class="st-col">
+                <div class="st-col-val" id="st-dl-val">—</div>
+                <div class="st-col-unit">Mbps</div>
+                <div class="st-col-lbl">{{ content.st_download }}</div>
+              </div>
+              <div class="st-col-div"></div>
+              <div class="st-col">
+                <div class="st-col-val" id="st-ul-val">—</div>
+                <div class="st-col-unit">Mbps</div>
+                <div class="st-col-lbl">{{ content.st_upload }}</div>
+              </div>
+            </div>
+            <button class="speedtest-btn" id="st-btn" onclick="runSpeedtest()" data-again="{{ content.st_again }}">{{ content.st_button }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-vpn">
+    <div class="card-body">
+      <div class="vpn-grid">
+        <div class="vpn-left">
+          <div class="vpn-heading">{{ content.vpn_title }}</div>
+          <div class="vpn-desc">{{ content.vpn_desc }}</div>
+          <div class="domain-label">vpn.misbahwork.my.id</div>
+        </div>
+        <a href="https://vpn.misbahwork.my.id" target="_blank" class="vpn-btn">{{ content.vpn_button }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-demo-page">
+    <div class="card-body">
+      <div class="demo-grid">
+        <div class="demo-left">
+          <div class="demo-title"><strong>{{ content.demo_title }}</strong></div>
+          <div class="demo-desc">{{ content.demo_desc }}</div>
+          <div class="domain-label">object.misbahwork.my.id</div>
+        </div>
+        <a href="https://object.misbahwork.my.id" target="_blank" class="demo-btn">
+          {{ content.demo_button }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-llm">
+    <div class="card-body">
+      <div class="llm-grid">
+        <div class="llm-left">
+          <div class="llm-heading">{{ content.llm_title }}</div>
+          <div class="llm-desc">{{ content.llm_desc }}</div>
+          <div class="domain-label domain-llm">chat.misbahwork.my.id</div>
+        </div>
+        <a href="https://chat.misbahwork.my.id" target="_blank" class="llm-btn">{{ content.llm_button }}</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const ARC = 188.5;
+
+  const cpuArc = document.getElementById('cpu-arc');
+  const ramArc = document.getElementById('ram-arc');
+  const cpuPct = document.getElementById('cpu-pct');
+  const ramPct = document.getElementById('ram-pct');
+  const ramDetail = document.getElementById('ram-detail');
+  const netDlArc = document.getElementById('net-dl-arc');
+  const netUlArc = document.getElementById('net-ul-arc');
+  const netPct = document.getElementById('net-pct');
+  const netDlVal = document.getElementById('net-dl-val');
+  const netUlVal = document.getElementById('net-ul-val');
+
+  async function fetchResource() {
+    try {
+      const res = await fetch('/resource');
+      const d = await res.json();
+      cpuArc.setAttribute('stroke-dashoffset', ARC * (1 - d.cpu / 100));
+      ramArc.setAttribute('stroke-dashoffset', ARC * (1 - d.ram_percent / 100));
+      cpuPct.textContent = d.cpu;
+      ramPct.textContent = d.ram_percent;
+      ramDetail.textContent = d.ram_used_gb + ' / ' + d.ram_total_gb + ' GB';
+      netDlArc.setAttribute('stroke-dashoffset', d.rx_pct > 0 ? ARC * (1 - d.rx_pct / 100) : ARC + 1);
+      netUlArc.setAttribute('stroke-dashoffset', d.tx_pct > 0 ? ARC * (1 - d.tx_pct / 100) : ARC + 1);
+      netPct.textContent = d.usage_pct.toFixed(2);
+      netDlVal.textContent = '\u2193 ' + d.rx_mbps.toFixed(2);
+      netUlVal.textContent = '\u2191 ' + d.tx_mbps.toFixed(2);
+    } catch (_) {}
+  }
+
+  fetchResource();
+  setInterval(fetchResource, 1000);
+})();
+
+/* ── Speedtest columns ── */
+let stRunning = false;
+
+function stCol(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+async function measurePing() {
+  const t0 = performance.now();
+  try { await fetch('/speedtest/download?size_mb=1'); } catch(_) {}
+  return performance.now() - t0;
+}
+
+function calcMbps(bytes, ms) {
+  return ms > 0 ? (bytes * 8) / 1_000 / ms : 0;
+}
+
+async function measureDownload(sizeMb, onSpeed) {
+  const t0 = performance.now();
+  let received = 0, speeds = [];
+  const resp = await fetch('/speedtest/download?size_mb=' + sizeMb);
+  if (!resp.ok) return 0;
+  const reader = resp.body.getReader();
+  let lastT = t0, lastB = 0;
+  while (true) {
+    const {done, value} = await reader.read();
+    if (done) break;
+    const now = performance.now();
+    received += value.length;
+    const dt = now - lastT;
+    if (dt >= 80) {
+      const mbps = calcMbps(received - lastB, dt);
+      speeds.push(mbps);
+      onSpeed(mbps);
+      lastT = now;
+      lastB = received;
+    }
+  }
+  const elapsed = performance.now() - t0;
+  const avg = speeds.length ? speeds.reduce((a,b)=>a+b,0) / speeds.length : calcMbps(received, elapsed);
+  return avg;
+}
+
+function measureUpload(sizeMb, onSpeed) {
+  return new Promise(resolve => {
+    const size = sizeMb * 1_000_000;
+    const data = new Uint8Array(size);
+    const t0 = performance.now();
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/speedtest/api/upload?size_mb=' + sizeMb);
+    let lastT = t0, lastB = 0, speeds = [];
+    xhr.upload.onprogress = e => {
+      if (!e.lengthComputable) return;
+      const now = performance.now();
+      const dt = now - lastT;
+      if (dt >= 80) {
+        const mbps = calcMbps(e.loaded - lastB, dt);
+        speeds.push(mbps);
+        onSpeed(mbps);
+        lastT = now;
+        lastB = e.loaded;
+      }
+    };
+    xhr.onload = () => {
+      const elapsed = performance.now() - t0;
+      resolve(speeds.length ? speeds.reduce((a,b)=>a+b,0) / speeds.length : calcMbps(size, elapsed));
+    };
+    xhr.onerror = () => resolve(0);
+    xhr.send(data);
+  });
+}
+
+async function runSpeedtest() {
+  if (stRunning) return;
+  stRunning = true;
+  const btn = document.getElementById('st-btn');
+  btn.disabled = true;
+  btn.textContent = 'Testing\u2026';
+
+  stCol('st-ping-val', '\u2026');
+  stCol('st-dl-val', '\u2014');
+  stCol('st-ul-val', '\u2014');
+  const ping = await measurePing();
+  stCol('st-ping-val', Math.round(ping));
+
+  stCol('st-dl-val', '0.0');
+  let dl = 0;
+  for (const s of [2, 5, 10, 20]) {
+    dl = await measureDownload(s, mbps => stCol('st-dl-val', mbps.toFixed(1)));
+  }
+  stCol('st-dl-val', dl.toFixed(1));
+
+  stCol('st-ul-val', '0.0');
+  let ul = 0;
+  for (const s of [1, 2, 5]) {
+    ul = await measureUpload(s, mbps => stCol('st-ul-val', mbps.toFixed(1)));
+  }
+  stCol('st-ul-val', ul.toFixed(1));
+
+  btn.disabled = false;
+  btn.textContent = btn.dataset.again;
+  stRunning = false;
+}
+</script>
+{% endblock %}

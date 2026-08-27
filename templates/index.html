@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="card card-profile">
+    <div class="card-body profile-grid">
+      <div class="profile-left">
+        <div class="hero-name">{{ content.hero_name }}</div>
+        <div class="slot-wrapper">
+          <div class="slot-track">
+            <div class="slot-item">{{ content.slot_1 }}</div>
+            <div class="slot-item">{{ content.slot_2 }}</div>
+            <div class="slot-item">{{ content.slot_3 }}</div>
+            <div class="slot-item">{{ content.slot_4 }}</div>
+            <div class="slot-item">{{ content.slot_1 }}</div>
+          </div>
+        </div>
+        <div class="hero-title">{{ content.hero_title }}</div>
+      </div>
+      <div class="profile-right">
+        <img src="/static/profile.jpg" alt="Profile" class="profile-img">
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-video">
+    <div class="card-body video-grid">
+      <div class="video-left">
+        <div class="video-wrapper">
+          <iframe width="100%" height="280" src="https://www.youtube.com/embed/RBTahfNUpwM?si=SkGctvb87fn6as3a" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="video-right">
+        <div class="hero-desc">{{ content.hero_desc | safe }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-demo">
+    <div class="card-body demo-center">
+      <div class="hero-tagline">{{ content.demo_tagline }}</div>
+      <a href="/demo" class="btn-demo">{{ content.demo_button }}</a>
+    </div>
+  </div>
+
+  <div class="card card-diary" id="diaryCard">
+    <div class="card-body diary-grid">
+      <div class="diary-left">
+        <div class="diary-headline">{{ content.diary_headline }}</div>
+        <div class="diary-desc">{{ content.diary_desc | safe }}</div>
+        <div class="domain-label domain-diary">diary.misbahwork.my.id</div>
+        <div class="diary-contrib" id="diaryContrib"></div>
+        <a href="http://diary.misbahwork.my.id" target="_blank" class="btn-diary">{{ content.diary_button }}</a>
+      </div>
+      <div class="diary-right">
+        <div class="diary-last-label">{{ content.diary_last_label }}</div>
+        <div class="diary-last-post" id="diaryLastPost">
+          <div class="diary-loading">{{ content.diary_loading }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DIARY_API = 'https://diary.misbahwork.my.id';
+
+async function loadDiary() {
+  try {
+    const [lastRes, statsRes] = await Promise.all([
+      fetch(DIARY_API + '/api/diary/last'),
+      fetch(DIARY_API + '/api/diary/stats')
+    ]);
+    const last = await lastRes.json();
+    const stats = await statsRes.json();
+
+    renderLastPost(last.post);
+    renderContrib(stats.stats || {});
+  } catch (e) {
+    document.getElementById('diaryLastPost').innerHTML =
+      '<div class="diary-loading">Could not load.</div>';
+  }
+}
+
+function renderLastPost(post) {
+  const el = document.getElementById('diaryLastPost');
+  if (!post) {
+    el.innerHTML = '<div class="diary-loading">No posts yet.</div>';
+    return;
+  }
+  const prefix = DIARY_API;
+  const mediaUrl = post.media_url ? prefix + post.media_url.split(',')[0] : null;
+  const mediaHtml = mediaUrl
+    ? (mediaUrl.match(/\.(mp4|webm|ogg|mov|avi)/i)
+        ? `<video src="${mediaUrl}" class="diary-media"></video>`
+        : `<img src="${mediaUrl}" class="diary-media">`)
+    : '';
+  const profilePic = post.profile_pic ? prefix + post.profile_pic : prefix + '/assets/default-profile.png';
+  const snippet = (post.content || '').substring(0, 120);
+  el.innerHTML = `
+    <div class="diary-post-user">
+      <img src="${profilePic}" class="diary-user-pic">
+      <span class="diary-username">${escapeHtml(post.username)}</span>
+    </div>
+    ${mediaHtml}
+    <div class="diary-post-snippet">${escapeHtml(snippet)}${post.content && post.content.length > 120 ? '...' : ''}</div>
+  `;
+}
+
+function renderContrib(stats) {
+  const el = document.getElementById('diaryContrib');
+  const days = [];
+  for (let i = 7; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    const count = stats[key] || 0;
+    days.push({ date: key, count });
+  }
+  const maxCount = Math.max(...days.map(d => d.count), 1);
+  el.innerHTML = '<div class="contrib-label">{{ content.diary_activity }}</div>';
+  const grid = document.createElement('div');
+  grid.className = 'contrib-grid';
+  days.forEach(d => {
+    const intensity = d.count > 0 ? Math.min(Math.round((d.count / maxCount) * 4), 4) : 0;
+    const block = document.createElement('div');
+    block.className = 'contrib-block';
+    block.dataset.level = intensity;
+    block.title = `${d.date}: ${d.count} post${d.count !== 1 ? 's' : ''}`;
+    grid.appendChild(block);
+  });
+  el.appendChild(grid);
+}
+
+function escapeHtml(text) {
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+loadDiary();
+</script>
+{% endblock %}

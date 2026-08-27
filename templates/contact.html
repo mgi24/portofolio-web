@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container contact-page">
+  <h2 class="contact-title">{{ content.contact_title }}</h2>
+
+  <div class="blobs-grid">
+    <a href="/phone" class="blob blob-wa">
+      <div class="blob-inner">
+        <img src="/static/wa.svg" alt="WhatsApp" class="blob-icon">
+        <span class="blob-name">{{ content.contact_wa_name }}</span>
+        <span class="blob-response">{{ content.contact_wa_resp }}</span>
+      </div>
+    </a>
+
+    <a href="https://www.facebook.com/MishbahGI" target="_blank" class="blob blob-fb">
+      <div class="blob-inner">
+        <img src="/static/fb.svg" alt="Facebook" class="blob-icon">
+        <span class="blob-name">{{ content.contact_fb_name }}</span>
+        <span class="blob-response">{{ content.contact_fb_resp }}</span>
+      </div>
+    </a>
+
+    <div class="blob blob-discord" onclick="toggleDiscord()">
+      <div class="blob-inner">
+        <img src="/static/discord.svg" alt="Discord" class="blob-icon">
+        <span class="blob-name">{{ content.contact_discord_name }}</span>
+        <div class="discord-reveal" id="discordReveal">
+          <span id="discordText">@gl1tchmmv</span>
+          <img src="/static/copy.svg" alt="Copy" class="copy-icon" id="discordCopyIcon">
+        </div>
+      </div>
+    </div>
+
+    <div class="blob blob-email" onclick="toggleEmail()">
+      <div class="blob-inner">
+        <img src="/static/email.svg" alt="Email" class="blob-icon">
+        <span class="blob-name">{{ content.contact_email_name }}</span>
+        <span class="blob-response">{{ content.contact_email_resp }}</span>
+        <div class="email-reveal" id="emailReveal">
+          <span id="emailText">mishbahgi@gmail.com</span>
+          <img src="/static/copy.svg" alt="Copy" class="copy-icon" id="emailCopyIcon">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="other-title">{{ content.contact_other_title }}</h3>
+  <div class="other-links">
+    <a href="/phone" class="other-item">
+      <img src="/static/tg.svg" alt="Telegram" class="other-icon">
+      <div class="other-text">
+        <span class="other-name">{{ content.contact_tg_name }}</span>
+        <span class="other-desc">{{ content.contact_tg_desc }}</span>
+      </div>
+    </a>
+    <a href="https://www.youtube.com/@MMVProject" target="_blank" class="other-item">
+      <img src="/static/yt.svg" alt="YouTube" class="other-icon">
+      <div class="other-text">
+        <span class="other-name">{{ content.contact_yt_name }}</span>
+        <span class="other-desc">{{ content.contact_yt_desc }}</span>
+      </div>
+    </a>
+    <a href="https://www.linkedin.com/in/ahmad-mishbahuddin/" target="_blank" class="other-item">
+      <img src="/static/linkedin.svg" alt="LinkedIn" class="other-icon">
+      <div class="other-text">
+        <span class="other-name">{{ content.contact_li_name }}</span>
+        <span class="other-desc">{{ content.contact_li_desc }}</span>
+      </div>
+    </a>
+    <a href="https://www.instagram.com/ahmad_mishbahuddin/" target="_blank" class="other-item">
+      <img src="/static/ig.svg" alt="Instagram" class="other-icon">
+      <div class="other-text">
+        <span class="other-name">{{ content.contact_ig_name }}</span>
+        <span class="other-desc">{{ content.contact_ig_desc }}</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="toast" id="toast">{{ content.toast_copied }}</div>
+
+<script>
+function copyText(text, iconId) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+  } catch (e) {
+    navigator.clipboard.writeText(text).catch(function(){});
+  }
+  document.body.removeChild(ta);
+
+  const icon = document.getElementById(iconId);
+  icon.src = '/static/check.svg';
+  icon.classList.add('copied');
+
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(function() {
+    toast.classList.remove('show');
+  }, 1500);
+
+  setTimeout(function() {
+    icon.src = '/static/copy.svg';
+    icon.classList.remove('copied');
+  }, 2000);
+}
+
+function toggleEmail() {
+  const el = document.getElementById('emailReveal');
+  el.classList.toggle('show');
+}
+
+function toggleDiscord() {
+  const el = document.getElementById('discordReveal');
+  el.classList.toggle('show');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('discordCopyIcon').addEventListener('click', function(e) {
+    e.stopPropagation();
+    copyText('gl1tchmmv', 'discordCopyIcon');
+  });
+
+  document.getElementById('emailCopyIcon').addEventListener('click', function(e) {
+    e.stopPropagation();
+    copyText('mishbahgi@gmail.com', 'emailCopyIcon');
+  });
+});
+</script>
+{% endblock %}
