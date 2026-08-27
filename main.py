@@ -131,17 +131,3 @@ async def phone(request: Request):
     contents = get_all_contents()
     return templates.TemplateResponse(request, "phone.html", {"contents": contents})
 
-# --- Safe redirect paths (whitelist) ---
-_SAFE_PATHS = {"", "/", "/demo", "/contact", "/phone"}
-
-@app.get("/set-language/{lang}")
-async def set_language(lang: str, request: Request, next: str = "/"):
-    if lang not in ("en", "id"):
-        raise HTTPException(status_code=400, detail="Invalid language")
-    # Validate next is a known safe path to prevent open redirect
-    clean_next = next.rstrip("/") or "/"
-    if clean_next not in _SAFE_PATHS and clean_next != "/":
-        clean_next = "/"
-    response = RedirectResponse(url=clean_next)
-    response.set_cookie(key="lang", value=lang)
-    return response
