@@ -6,8 +6,9 @@ services:
     image: localhost/portofolio:latest
     container_name: portofolio
     ports:
-      # Bind to loopback only — not exposed to host network / Incus bridges
       - "127.0.0.1:8002:8002"
+    volumes:
+      - ./:/app:ro
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -15,21 +16,10 @@ services:
     tmpfs:
       - /tmp:size=64M
     user: "65534:65534"
-    # Isolate from host; container has no elevated capabilities
     cap_drop:
       - ALL
-    # Minimal CPU/memory limits to prevent abuse
     deploy:
       resources:
         limits:
           cpus: "1.0"
           memory: 256M
-    # Disable network policies that could be abused
-    networks:
-      - portofolio-net
-
-networks:
-  portofolio-net:
-    driver: bridge
-    internal: true   # No outbound/inbound internet from this container
-                             # Traffic flows only through 127.0.0.1:8002 on host
