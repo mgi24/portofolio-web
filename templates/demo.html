@@ -114,6 +114,43 @@
       </div>
     </div>
   </div>
-
 </div>
+
+<script>
+(function() {
+  const ARC = 188.5;
+
+  const cpuArc = document.getElementById('cpu-arc');
+  const ramArc = document.getElementById('ram-arc');
+  const cpuPct = document.getElementById('cpu-pct');
+  const ramPct = document.getElementById('ram-pct');
+  const ramDetail = document.getElementById('ram-detail');
+  const netDlArc = document.getElementById('net-dl-arc');
+  const netUlArc = document.getElementById('net-ul-arc');
+  const netPct = document.getElementById('net-pct');
+  const netDlVal = document.getElementById('net-dl-val');
+  const netUlVal = document.getElementById('net-ul-val');
+
+  async function fetchResource() {
+    try {
+      const res = await fetch('/resource');
+      const d = await res.json();
+      cpuArc.setAttribute('stroke-dashoffset', ARC * (1 - d.cpu / 100));
+      ramArc.setAttribute('stroke-dashoffset', ARC * (1 - d.ram_percent / 100));
+      cpuPct.textContent = d.cpu;
+      ramPct.textContent = d.ram_percent;
+      ramDetail.textContent = d.ram_used_gb + ' / ' + d.ram_total_gb + ' GB';
+      netDlArc.setAttribute('stroke-dashoffset', d.rx_pct > 0 ? ARC * (1 - d.rx_pct / 100) : ARC + 1);
+      netUlArc.setAttribute('stroke-dashoffset', d.tx_pct > 0 ? ARC * (1 - d.tx_pct / 100) : ARC + 1);
+      netPct.textContent = d.usage_pct.toFixed(2);
+      netDlVal.textContent = '\u2193 ' + d.rx_mbps.toFixed(2);
+      netUlVal.textContent = '\u2191 ' + d.tx_mbps.toFixed(2);
+    } catch (_) {}
+  }
+
+  fetchResource();
+  setInterval(fetchResource, 1000);
+})();
+</script>
+
 {% endblock %}
