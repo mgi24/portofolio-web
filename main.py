@@ -24,7 +24,7 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     
     # Content Security Policy
-    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube.com;"
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://*.youtube.com https://*.ytimg.com; font-src 'self'; connect-src 'self'; frame-src https://www.youtube.com; frame-ancestors 'none'; form-action 'self'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests;"
     
     # Enforce HTTPS
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
