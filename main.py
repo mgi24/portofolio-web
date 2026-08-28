@@ -1,4 +1,5 @@
 import json
+import secrets
 import time
 from pathlib import Path
 
@@ -15,6 +16,10 @@ app = FastAPI()
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     """Add security headers to all responses"""
+    # Generate a per-request nonce so inline scripts/styles are allowed without 'unsafe-inline'
+    nonce = secrets.token_urlsafe(16)
+    request.state.nonce = nonce
+
     response = await call_next(request)
     
     # Prevent MIME-type sniffing
@@ -24,7 +29,20 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     
     # Content Security Policy
-    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://*.youtube.com https://*.ytimg.com; font-src 'self'; connect-src 'self'; frame-src https://www.youtube.com; frame-ancestors 'none'; form-action 'self'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests;"
+    response.headers["Content-Security-Policy"] = (
+        f"default-src 'self'; "
+        f"script-src 'self' 'nonce-{nonce}'; "
+        f"style-src 'self' 'nonce-{nonce}'; "
+        f"img-src 'self' data: https://*.youtube.com https://*.ytimg.com; "
+        f"font-src 'self'; "
+        f"connect-src 'self'; "
+        f"frame-src https://www.youtube.com; "
+        f"frame-ancestors 'none'; "
+        f"form-action 'self'; "
+        f"base-uri 'none'; "
+        f"object-src 'none'; "
+        f"upgrade-insecure-requests;"
+    )
     
     # Enforce HTTPS
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"

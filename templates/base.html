@@ -35,7 +35,7 @@
   <!-- i18n client-side system -->
   <script src="/static/i18n.js"></script>
 
-  <script>
+  <script nonce="{{ request.state.nonce }}">
     // Initialize i18n with translations from server
     I18n.translations = JSON.parse(document.getElementById('i18n-translations').textContent);
     I18n.init();
