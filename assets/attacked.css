@@ -1,0 +1,149 @@
+/* Only the incident content: header, cards, colors, and typography use style.css. */
+.attacked-entry .attack-title {
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #292929;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.attacked-entry .attack-section-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: 0.2px;
+}
+
+.attacked-entry .attack-preview,
+.attacked-entry .attack-image {
+  display: block;
+  width: 100%;
+  background: #000;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  margin-bottom: 32px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+.attacked-entry .attack-preview { height: 710px; }
+.attacked-entry .attack-image { max-width: 820px; height: auto; margin-inline: auto; }
+
+.attacked-entry .attack-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 5px 0 0;
+}
+
+.attacked-entry .attack-timeline > div {
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr);
+  gap: 22px;
+  position: relative;
+  padding: 0 0 24px 35px;
+  --event-color: #a1a1aa;
+  --event-background: rgba(161, 161, 170, 0.06);
+  --event-border: rgba(161, 161, 170, 0.18);
+}
+
+.attacked-entry .attack-timeline > div::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  left: 6px;
+  top: 18px;
+  bottom: -18px;
+  background: #343434;
+}
+
+.attacked-entry .attack-timeline > div::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 13px;
+  left: 0;
+  border: 3px solid var(--event-color);
+  border-radius: 50%;
+  background: #141414;
+  box-shadow: 0 0 0 5px #141414;
+}
+
+.attacked-entry .attack-timeline > div:last-child { padding-bottom: 0; }
+.attacked-entry .attack-timeline > div:last-child::before { display: none; }
+
+.attacked-entry .attack-timeline > .attack-event-observed {
+  --event-color: #93c5fd;
+  --event-background: rgba(59, 130, 246, 0.06);
+  --event-border: rgba(59, 130, 246, 0.2);
+}
+
+.attacked-entry .attack-timeline > .attack-event-warning {
+  --event-color: #fcd34d;
+  --event-background: rgba(250, 204, 21, 0.06);
+  --event-border: rgba(250, 204, 21, 0.2);
+}
+
+.attacked-entry .attack-timeline > .attack-event-critical {
+  --event-color: #fca5a5;
+  --event-background: rgba(239, 68, 68, 0.08);
+  --event-border: rgba(239, 68, 68, 0.22);
+}
+
+.attacked-entry .attack-timeline > .attack-event-critical::after {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.attacked-entry .attack-timeline dt {
+  display: flex;
+  align-items: center;
+  align-self: start;
+  gap: 9px;
+  color: var(--event-color);
+  background: var(--event-background);
+  border: 1px solid var(--event-border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+.attacked-entry .attack-event-icon { font-size: 14px; line-height: 1; flex-shrink: 0; }
+.attacked-entry .attack-timeline dd { padding: 6px 0 0; color: #aaa; }
+.attacked-entry .attack-timeline strong { color: #e0e0e0; font-weight: 600; }
+
+.attacked-entry .attack-solution {
+  color: #e0e0e0;
+  margin-top: 28px;
+  font-size: 18px;
+  line-height: 1.6;
+  padding: 17px 20px;
+  border: 1px solid #244239;
+  border-left: 3px solid #00d4aa;
+  border-radius: 10px;
+  background: rgba(0, 212, 170, 0.04);
+}
+
+.attacked-entry .attack-solution strong { color: #6ee7b7; }
+
+.attacked-entry .attack-future {
+  margin-top: 12px;
+  border-color: #26354b;
+  border-left-color: #60a5fa;
+  background: rgba(59, 130, 246, 0.04);
+}
+
+.attacked-entry .attack-future strong { color: #93c5fd; }
+
+@media (max-width: 768px) {
+  .attacked-entry .attack-title { font-size: 22px; }
+  .attacked-entry .attack-timeline > div { grid-template-columns: 1fr; gap: 8px; padding-left: 29px; padding-bottom: 24px; }
+  .attacked-entry .attack-timeline dt { justify-self: start; }
+  .attacked-entry .attack-timeline dd { padding-top: 0; font-size: 14px; }
+  .attacked-entry .attack-solution { font-size: 16px; padding: 15px 16px; }
+  .attacked-entry .attack-preview { height: 690px; }
+}

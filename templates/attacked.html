@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/attacked.css">
+<main class="container" lang="id">
+  <article class="card card-profile attacked-entry" aria-labelledby="attack-2026-08-22">
+    <div class="card-body">
+      <h1 class="demo-title attack-title" id="attack-2026-08-22">22 Agustus 2026 - Deface diary.misbahwork.my.id dan full root compromise container</h1>
+
+      <h2 class="attack-section-title">Preview Hack</h2>
+      <iframe class="attack-preview" src="/attacked/preview/2026-08-22" title="Preview halaman deface Diary pada 22 Agustus 2026" sandbox="" referrerpolicy="no-referrer" width="1000" height="710"></iframe>
+
+      <h2 class="attack-section-title" id="history">Jam attack dan penjelasan</h2>
+      <dl class="attack-timeline demo-desc">
+        <div class="attack-event attack-event-observed"><dt><span class="attack-event-icon" aria-hidden="true">🔎</span><time datetime="2026-08-22T03:24:48+07:00">03:24–03:27 WIB</time></dt><dd>Penyerang membuka Luckfox dari tautan Facebook, mencoba login, lalu melakukan upload. Upload tercatat, tetapi RCE dari jalur ini <strong>belum terbukti</strong>.</dd></div>
+        <div class="attack-event attack-event-warning"><dt><span class="attack-event-icon" aria-hidden="true">⚠️</span><time datetime="2026-08-22T04:00:28+07:00">04:00–04:39 WIB</time></dt><dd>Celah <strong>path traversal / LFI</strong> pada VPNweb dipakai untuk membaca file sistem dan secret aplikasi. VPNweb berjalan sebagai root.</dd></div>
+        <div class="attack-event attack-event-critical"><dt><span class="attack-event-icon" aria-hidden="true">🔑</span><time datetime="2026-08-22T04:39:53+07:00">04:39–04:46 WIB</time></dt><dd><strong>File environment Diary bocor.</strong> Password yang sama dipakai untuk akun sistem dengan sudo; <strong>80 detik kemudian</strong> login manager berhasil. Panel yang berjalan sebagai root dipakai untuk memasang SSH key penyerang.</dd></div>
+        <div class="attack-event attack-event-critical"><dt><span class="attack-event-icon" aria-hidden="true">🚨</span><time datetime="2026-08-22T04:55:10+07:00">04:55–05:50 WIB</time></dt><dd><strong>Template Diary ditimpa.</strong> Login SSH root pertama tercatat pada <strong>05:13:33</strong>, subdomain Luck diarahkan ke Diary pada 05:19:57, dan deface final tersimpan pada <strong>05:50:56</strong>.</dd></div>
+        <div class="attack-event attack-event-critical"><dt><span class="attack-event-icon" aria-hidden="true">🚨</span><time datetime="2026-08-22T07:33:45+07:00">07:33–08:04 WIB</time></dt><dd>Penyerang memasang <strong>persistence</strong> melalui cron, systemd, shell startup, PAM, dan konfigurasi SSH untuk mempertahankan akses.</dd></div>
+        <div class="attack-event attack-event-end"><dt><span class="attack-event-icon" aria-hidden="true">🕘</span><time datetime="2026-08-22T08:11:00+07:00">Sekitar 08:11 WIB</time></dt><dd>Jejak terakhir pada log snapshot. Container sudah <strong>terkompromi penuh sebagai root</strong> dan seluruh secret yang dapat diakses harus dianggap bocor.</dd></div>
+      </dl>
+
+      <p class="attack-solution"><strong>Solusi:</strong> Shutdown + Rebuild VM</p>
+    </div>
+  </article>
+
+  <article class="card card-profile attacked-entry" aria-labelledby="attack-2026-08-20">
+    <div class="card-body">
+      <h1 class="demo-title attack-title" id="attack-2026-08-20">20 Agustus 2026 - XSS luck.misbahwork.my.id</h1>
+
+      <h2 class="attack-section-title">Preview Hack</h2>
+      <img class="attack-image" src="/static/attacked/wowoksec.jpg" alt="Screenshot XSS luck.misbahwork.my.id pada 20 Agustus 2026" width="820" height="956" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+
+      <h2 class="attack-section-title">Jam attack dan penjelasan</h2>
+      <dl class="attack-timeline demo-desc">
+        <div class="attack-event attack-event-warning"><dt><span class="attack-event-icon" aria-hidden="true">⚠️</span><time datetime="2026-08-20T17:00:00+07:00">17:00 WIB</time></dt><dd><strong>XSS</strong> pada luck.misbahwork.my.id.</dd></div>
+      </dl>
+
+      <p class="attack-solution"><strong>Solusi:</strong> Quick fix sanitize field</p>
+      <p class="attack-solution attack-future"><strong>Future:</strong> Semua files akan disanitize ke S3 storage sebelum saved ke server</p>
+    </div>
+  </article>
+</main>
+{% endblock %}

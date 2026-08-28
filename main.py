@@ -3,9 +3,11 @@ import time
 from pathlib import Path
 
 from fastapi import FastAPI, Request, Cookie, HTTPException
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
+from attacked_archive import ARCHIVE_FILES, archive_headers
 
 app = FastAPI()
 
@@ -35,6 +37,9 @@ async def add_security_headers(request: Request, call_next):
     
     # Permissions Policy
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+
+    # Only the new history/preview routes and image use these scoped policies.
+    response.headers.update(archive_headers(request.url.path))
     
     return response
 
@@ -139,6 +144,17 @@ async def get_resource(request: Request):
     }
 
 # --- Pages ---
+
+@app.get("/attacked", include_in_schema=False)
+@app.get("/attacked/", include_in_schema=False)
+async def attacked(request: Request):
+    contents = get_all_contents()
+    return templates.TemplateResponse(request, "attacked.html", {"contents": contents})
+
+@app.get("/attacked/preview/2026-08-22", include_in_schema=False)
+async def attacked_preview(request: Request):
+    # A fixed lookup, never a filesystem path derived from query/user input.
+    return FileResponse(BASE_DIR / ARCHIVE_FILES[request.url.path], media_type="text/html")
 
 @app.get("/")
 async def index(request: Request):
